@@ -36,10 +36,11 @@ namespace Hastane.DataAccess.EntityFramework.Concrete
         public async Task<bool> Delete(T entity)
         {
             entity.Status = Status.Passive;
+            entity.DeletedDate= DateTime.Now;
             return await Save()>0;
         }
 
-        public async Task<List<T>> GetAll() => await _dbSet.Where(x=>x.Status== Status.Active).ToListAsync();
+        public async Task<List<T>> GetAll() => await _dbSet.Where(x=>x.Status==Status.Active||x.Status==Status.Modified).ToListAsync();
 
 
         public async Task<T> GetById(Guid id) => await _dbSet.FindAsync(id);
@@ -53,6 +54,8 @@ namespace Hastane.DataAccess.EntityFramework.Concrete
         public async Task<bool> Update(T entity)
         {
            _hastaneDbContext.Entry<T>(entity).State = EntityState.Modified;
+            entity.ModifiedDate= DateTime.Now;
+            entity.Status= Status.Modified;
             return await Save() > 0;
         }
 

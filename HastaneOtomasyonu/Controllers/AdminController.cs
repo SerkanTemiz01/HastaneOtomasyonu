@@ -1,18 +1,22 @@
-﻿using Hastane.DataAccess.Abstract;
+﻿using Hastane.Core.Enums;
+using Hastane.DataAccess.Abstract;
 using Hastane.Entities.Concrete;
 using HastaneOtomasyonu.Models;
 using HastaneOtomasyonu.Models.DTobj;
 using HastaneOtomasyonu.Models.VMs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HastaneOtomasyonu.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IManagerRepo _managerRepo;
-        public AdminController(IManagerRepo managerRepo)
+        private readonly IPersonelRepo _personelRepo;
+        public AdminController(IManagerRepo managerRepo, IPersonelRepo personelRepo)
         {
-            _managerRepo= managerRepo;
+            _managerRepo = managerRepo;
+            _personelRepo = personelRepo;
         }
         public IActionResult Index()
         {
@@ -48,50 +52,55 @@ namespace HastaneOtomasyonu.Controllers
             return View(managerList);
         }
 
-        //public IActionResult UpdatedManager(Guid id)
-        //{
-        //    var updatedManager=HomeController._myUser.Find(i=>i.ID==id);
-        //    return View(updatedManager);    
-        //}
-        //[HttpPost]
-        //public IActionResult UpdatedManager(Manager manager)
-        //{
-        //    HomeController._myUser.Remove(HomeController._myUser.Find(i => i.ID == manager.ID));
-        //    HomeController._myUser.Add( manager);
-        //    return RedirectToAction(nameof(ListOfManagers));
-        //}
-        //public IActionResult DeletedManager(Guid id)
-        //{
-        //    HomeController._myUser.Remove(HomeController._myUser.Find(i => i.ID == id));
-        //    return RedirectToAction(nameof(ListOfManagers));
-        //}
-        //public IActionResult AddPersonel()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public IActionResult AddPersonel(Personel personel)
-        //{
-        //    if(ModelState.IsValid) 
-        //    {
-        //        HomeController._myUser.Add(personel);
-        //        return RedirectToAction(nameof(ListOfPersonels));
-        //    }
-        //    else
-        //    return View(personel);
-        //}
-        //public IActionResult ListOfPersonels()
-        //{
-        //    List<Personel> personelList = new List<Personel>();
-        //    foreach (var item in HomeController._myUser)
-        //    {
-        //        if (item is Personel)
-        //        {
-        //            personelList.Add((Personel)item);
-        //        }
-        //    }
-        //    return View(personelList);
-        //}
+        public async Task<IActionResult> UpdatedManager(Guid id)
+        {
+            var updatedManager =await _managerRepo.GetById(id);
+            
+            return View(updatedManager);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdatedManager(Manager manager)
+        {
+            await _managerRepo.Update(manager);
+         
+            return RedirectToAction(nameof(ListOfManagers));
+        }
+        public async Task<IActionResult> DeletedManager(Guid id)
+        {
+            await _managerRepo.Delete(await _managerRepo.GetById(id));
+            return RedirectToAction(nameof(ListOfManagers));
+        }
+        public async Task<IActionResult> AddPersonel()
+        {
+            IEnumerable<Manager> managerList =(IEnumerable<Manager>)(await _managerRepo.GetAll());
+            ViewBag.ManagerID = new SelectList(managerList, "ID", "Name");
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddPersonel(AddPersonelDTO addPersonelDTO)
+        {
+            Personel personel=new Personel();
+            if (ModelState.IsValid)
+            {
+                personel.Name= addPersonelDTO.Name;
+                personel.Surname= addPersonelDTO.Surname;
+                personel.ID= addPersonelDTO.ID;
+                personel.Status= addPersonelDTO.Status;
+                personel.CreatedDate= addPersonelDTO.CreatedDate;
+                personel.EmailAddress= addPersonelDTO.EmailAddress;
+                personel.Salary= addPersonelDTO.Salary;
+                personel.ManagerID = addPersonelDTO.ManagerID;
+                personel.Password = GivePassword();
+                await _personelRepo.Add(personel);
+                return RedirectToAction(nameof(ListOfPersonels));
+            }
+            else
+                return View(addPersonelDTO);
+        }
+        public async Task<IActionResult> ListOfPersonels()
+        {
+            return View(await _personelRepo.GetAll());
+        }
         //public IActionResult ShowUsAll()
         //{
         //    PersonelManagerVM personelManagerVM=new PersonelManagerVM();

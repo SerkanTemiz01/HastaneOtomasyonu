@@ -9,6 +9,7 @@ namespace Hastane.Core.Enums
     public enum Status
     {
         Active=1,
+        Modified,
         Passive
     }
 }
