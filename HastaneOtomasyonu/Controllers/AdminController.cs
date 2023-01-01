@@ -101,27 +101,34 @@ namespace HastaneOtomasyonu.Controllers
         {
             return View(await _personelRepo.GetAll());
         }
-        //public IActionResult ShowUsAll()
-        //{
-        //    PersonelManagerVM personelManagerVM=new PersonelManagerVM();
-        //    List<Personel> myPersonels= new List<Personel>();
-        //    List<Manager> myManagers=new List<Manager>();
+        public async Task<IActionResult> UpdatePersonel(Guid id)
+        {
+            IEnumerable<Manager> managerList = (IEnumerable<Manager>)(await _managerRepo.GetAll());
+            ViewBag.ManagerID = new SelectList(managerList, "ID", "Name");
+            var updatedPersonel = await _personelRepo.GetById(id);
+            return View(updatedPersonel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdatePersonel(Personel personel)
+        {
+            await _personelRepo.Update(personel);
 
-        //    foreach(var item in HomeController._myUser)
-        //    {
-        //        if(item is Personel) 
-        //        {
-        //            myPersonels.Add((Personel)item);
-        //        }
-        //        if(item is Manager) 
-        //        {
-        //            myManagers.Add((Manager)item);
-        //        }
-        //    }
-        //    personelManagerVM.myManagers = myManagers;
-        //    personelManagerVM.myPersonels = myPersonels;
-        //    return View(personelManagerVM);
-        //}
+            return RedirectToAction(nameof(ListOfPersonels));
+        }
+        public async Task<IActionResult> DeletePersonel(Guid id)
+        {
+            await _personelRepo.Delete(await _personelRepo.GetById(id));
+
+            return RedirectToAction(nameof(ListOfPersonels));
+        }
+        [HttpGet]
+        public async Task<IActionResult> ShowUsAll()
+        {
+            ShowUsAllVM showUsAllVM=new ShowUsAllVM();
+            showUsAllVM.managers = await _managerRepo.GetAll();
+            showUsAllVM.personels =await _personelRepo.GetAll();
+            return View(showUsAllVM);
+        }
 
         [NonAction]
         private string GivePassword()
