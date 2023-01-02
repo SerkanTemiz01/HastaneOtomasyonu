@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<HastaneOtomasyonu.Models.Personel>
+﻿@model IEnumerable<Hastane.Entities.Concrete.Personel>
 
 @{
     ViewData["Title"] = "ListOfPersonels";
@@ -57,13 +57,11 @@
                 @item.Salary
             </td>
             
-         @*   <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+           <td>
+                    <a asp-action="UpdatePersonel" asp-route-id="@item.ID" class="btn btn-success">Update</a>
+                    <a class="btn btn-danger" asp-action="DeletePersonel" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-*@
