@@ -1,22 +1,23 @@
-﻿using Hastane.Core.Enums;
-using Hastane.DataAccess.Abstract;
+﻿
+using Hastane.Business.Models.DTOs;
+using Hastane.Business.Services.AdminService;
 using Hastane.Entities.Concrete;
 using HastaneOtomasyonu.Models;
-using HastaneOtomasyonu.Models.DTobj;
-using HastaneOtomasyonu.Models.VMs;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HastaneOtomasyonu.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
-        private readonly IManagerRepo _managerRepo;
-        private readonly IPersonelRepo _personelRepo;
-        public AdminController(IManagerRepo managerRepo, IPersonelRepo personelRepo)
+        private readonly IAdminService _adminService;
+        
+        public AdminController(IAdminService adminService)
         {
-            _managerRepo = managerRepo;
-            _personelRepo = personelRepo;
+           _adminService= adminService;
         }
         public IActionResult Index()
         {
@@ -29,18 +30,10 @@ namespace HastaneOtomasyonu.Controllers
         [HttpPost]
         public async Task<IActionResult> AddManager(AddManagerDTO addManagerDTO)
         {
-            Manager manager=new Manager();
+            
             if (ModelState.IsValid)
             {
-                manager.ID= addManagerDTO.ID;
-                manager.Name= addManagerDTO.Name;
-                manager.Salary= addManagerDTO.Salary;
-                manager.Surname= addManagerDTO.Surname;
-                manager.Status= addManagerDTO.Status;
-                manager.CreatedDate= addManagerDTO.CreatedDate;
-                manager.EmailAddress= addManagerDTO.EmailAddress;
-                manager.Password = GivePassword();
-                await _managerRepo.Add(manager);
+               await _adminService.AddManager(addManagerDTO);
                 return RedirectToAction(nameof(ListOfManagers));
             }
             return View(addManagerDTO);
@@ -48,101 +41,75 @@ namespace HastaneOtomasyonu.Controllers
 
         public async Task<IActionResult> ListOfManagers()
         {
-            var managerList=await _managerRepo.GetAll();
+            var managerList = await _adminService.ListOfManager();
             return View(managerList);
         }
 
-        public async Task<IActionResult> UpdatedManager(Guid id)
+        //public async Task<IActionResult> UpdatedManager(Guid id)
+        //{
+
+
+        //    return View(updatedManager);
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> UpdatedManager(Manager manager)
+        //{
+        //    await _managerRepo.Update(manager);
+
+        //    return RedirectToAction(nameof(ListOfManagers));
+        //}
+        //public async Task<IActionResult> DeletedManager(Guid id)
+        //{
+        //    await _managerRepo.Delete(await _managerRepo.GetById(id));
+        //    return RedirectToAction(nameof(ListOfManagers));
+    //}
+    public IActionResult AddPersonel()
+    {
+        return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> AddPersonel(AddPersonelDTO addPersonelDTO)
+    {
+        
+        if (ModelState.IsValid)
         {
-            var updatedManager =await _managerRepo.GetById(id);
-            
-            return View(updatedManager);
+            await _adminService.AddPersonel(addPersonelDTO);
+            return RedirectToAction(nameof(ListOfPersonels));
         }
-        [HttpPost]
-        public async Task<IActionResult> UpdatedManager(Manager manager)
-        {
-            await _managerRepo.Update(manager);
-         
-            return RedirectToAction(nameof(ListOfManagers));
-        }
-        public async Task<IActionResult> DeletedManager(Guid id)
-        {
-            await _managerRepo.Delete(await _managerRepo.GetById(id));
-            return RedirectToAction(nameof(ListOfManagers));
-        }
-        public async Task<IActionResult> AddPersonel()
-        {
-            IEnumerable<Manager> managerList =(IEnumerable<Manager>)(await _managerRepo.GetAll());
-            ViewBag.ManagerID = new SelectList(managerList, "ID", "Name");
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> AddPersonel(AddPersonelDTO addPersonelDTO)
-        {
-            Personel personel=new Personel();
-            if (ModelState.IsValid)
-            {
-                personel.Name= addPersonelDTO.Name;
-                personel.Surname= addPersonelDTO.Surname;
-                personel.ID= addPersonelDTO.ID;
-                personel.Status= addPersonelDTO.Status;
-                personel.CreatedDate= addPersonelDTO.CreatedDate;
-                personel.EmailAddress= addPersonelDTO.EmailAddress;
-                personel.Salary= addPersonelDTO.Salary;
-                personel.ManagerID = addPersonelDTO.ManagerID;
-                personel.Password = GivePassword();
-                await _personelRepo.Add(personel);
-                return RedirectToAction(nameof(ListOfPersonels));
-            }
-            else
-                return View(addPersonelDTO);
-        }
-        public async Task<IActionResult> ListOfPersonels()
-        {
-            return View(await _personelRepo.GetAll());
-        }
+        else
+            return View(addPersonelDTO);
+    }
+    public async Task<IActionResult> ListOfPersonels()
+    {
+        return View(await _adminService.ListOfPersonels());
+    }
+        [HttpGet]
         public async Task<IActionResult> UpdatePersonel(Guid id)
         {
-            IEnumerable<Manager> managerList = (IEnumerable<Manager>)(await _managerRepo.GetAll());
-            ViewBag.ManagerID = new SelectList(managerList, "ID", "Name");
-            var updatedPersonel = await _personelRepo.GetById(id);
-            return View(updatedPersonel);
+            return View(await _adminService.EmployeeGetByID(id));
         }
         [HttpPost]
-        public async Task<IActionResult> UpdatePersonel(Personel personel)
+        public async Task<IActionResult> UpdatePersonel(Employee employee)
         {
-            await _personelRepo.Update(personel);
+            await _adminService.UpdateEmployee(employee);
 
             return RedirectToAction(nameof(ListOfPersonels));
         }
         public async Task<IActionResult> DeletePersonel(Guid id)
         {
-            await _personelRepo.Delete(await _personelRepo.GetById(id));
+            await _adminService.DeleteEmployee(id);
 
             return RedirectToAction(nameof(ListOfPersonels));
         }
-        [HttpGet]
-        public async Task<IActionResult> ShowUsAll()
-        {
-            ShowUsAllVM showUsAllVM=new ShowUsAllVM();
-            showUsAllVM.managers = await _managerRepo.GetAll();
-            showUsAllVM.personels =await _personelRepo.GetAll();
-            return View(showUsAllVM);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> ShowUsAll()
+        //{
+        //    ShowUsAllVM showUsAllVM=new ShowUsAllVM();
+        //    showUsAllVM.managers = await _managerRepo.GetAll();
+        //    showUsAllVM.personels =await _personelRepo.GetAll();
+        //    return View(showUsAllVM);
+        //}
 
-        [NonAction]
-        private string GivePassword()
-        {
-            Random rastgele = new Random();
-            string sifre = String.Empty;
 
-            for (int i = 1; i <= 6; i++)
-            {
-                int sayi1 = rastgele.Next(65, 91);
-                //65 dahil, 91 dahil değil A ile Z arasında
-                sifre += (char)sayi1;
-            }
-            return sifre;
-        }
     }
 }

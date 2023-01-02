@@ -49,6 +49,9 @@ namespace Hastane.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Roles")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -61,7 +64,7 @@ namespace Hastane.DataAccess.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("Hastane.Entities.Concrete.Manager", b =>
+            modelBuilder.Entity("Hastane.Entities.Concrete.Employee", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -91,7 +94,10 @@ namespace Hastane.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Salary")
+                    b.Property<int>("Roles")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Salary")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
@@ -103,72 +109,7 @@ namespace Hastane.DataAccess.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Managers");
-                });
-
-            modelBuilder.Entity("Hastane.Entities.Concrete.Personel", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdentityNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ManagerID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ManagerID");
-
-                    b.ToTable("Personels");
-                });
-
-            modelBuilder.Entity("Hastane.Entities.Concrete.Personel", b =>
-                {
-                    b.HasOne("Hastane.Entities.Concrete.Manager", "Manager")
-                        .WithMany("personels")
-                        .HasForeignKey("ManagerID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Manager");
-                });
-
-            modelBuilder.Entity("Hastane.Entities.Concrete.Manager", b =>
-                {
-                    b.Navigation("personels");
+                    b.ToTable("Employees");
                 });
 #pragma warning restore 612, 618
         }

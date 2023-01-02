@@ -23,10 +23,29 @@ namespace HastaneOtomasyonu.Models.SeedDataFolder
                     EmailAddress = "serkan@gmail.com",
                     Status = Status.Active,
                     Password = "1234",
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    Roles=Roles.Admin
                 });
-                dbContext.SaveChanges();
+              
             }
-        }
+            if(dbContext.Employees.Count() == 0) 
+            {
+				dbContext.Employees.Add(new Employee()
+				{
+					ID = Guid.NewGuid(),
+					Name = "Ayşenur",
+					Surname = "AltınSoy",
+					EmailAddress = "Ayşenur@gmail.com",
+					Status = Status.Active,
+					Password = "1234",
+                    IdentityNumber="2324242",
+                    Salary=12500,
+					CreatedDate = DateTime.Now,
+					Roles = Roles.Manager
+				});
+			}
+			
+			dbContext.SaveChanges();
+		}
     }
 }
