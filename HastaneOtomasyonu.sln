@@ -5,11 +5,15 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HastaneOtomasyonu", "HastaneOtomasyonu\HastaneOtomasyonu.csproj", "{1A1A3EB6-E1C2-46AB-957D-468CFED3E97F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hastane.Core", "Hastane.Core\Hastane.Core.csproj", "{70F01D91-22F2-4D4D-822C-9BE5DEDD011F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hastane.Core", "Hastane.Core\Hastane.Core.csproj", "{70F01D91-22F2-4D4D-822C-9BE5DEDD011F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hastane.Entities", "Hastane.Entities\Hastane.Entities.csproj", "{AE921EC4-50C7-4A2B-B3B5-8874758EB479}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hastane.Entities", "Hastane.Entities\Hastane.Entities.csproj", "{AE921EC4-50C7-4A2B-B3B5-8874758EB479}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hastane.DataAccess", "Hastane.DataAccess\Hastane.DataAccess.csproj", "{7310DE4B-88B2-4DED-A51C-F02B22DD4C07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hastane.DataAccess", "Hastane.DataAccess\Hastane.DataAccess.csproj", "{7310DE4B-88B2-4DED-A51C-F02B22DD4C07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hastane.Business", "Hastane.Business\Hastane.Business.csproj", "{A8B66897-B3F3-46E7-B6E0-3B8B74D3CD04}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{25CB9C83-3804-43DA-85E1-076C6E162CBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,10 @@ Global
 		{7310DE4B-88B2-4DED-A51C-F02B22DD4C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7310DE4B-88B2-4DED-A51C-F02B22DD4C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7310DE4B-88B2-4DED-A51C-F02B22DD4C07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B66897-B3F3-46E7-B6E0-3B8B74D3CD04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B66897-B3F3-46E7-B6E0-3B8B74D3CD04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B66897-B3F3-46E7-B6E0-3B8B74D3CD04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B66897-B3F3-46E7-B6E0-3B8B74D3CD04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<Hastane.Entities.Concrete.Manager>
+@model IEnumerable<Hastane.Business.Models.VMs.ListOfManagersVM>
 
 @{
     ViewData["Title"] = "ListOfManagers";
@@ -24,10 +24,10 @@
                 EmailAddress
             </th>
             <th>
-                Password
+                Salary
             </th>
             <th>
-                Status
+                Roles
             </th>
             <th>
                 Function
@@ -48,10 +48,11 @@
                     @item.EmailAddress
                 </td>
                 <td>
-                    @item.Password
+                    @item.Salary
                 </td>
+               
                 <td>
-                    @item.Status
+                    @item.Roles
                 </td>
                 <td>
                     <a class="btn btn-success" asp-action="UpdatedManager" asp-route-id="@item.ID">Update</a>

@@ -1,6 +1,6 @@
 ﻿using Hastane.Core.Enums;
 
-namespace HastaneOtomasyonu.Models.DTobj
+namespace Hastane.Business.Models.DTOs
 {
     public class AddManagerDTO
     {
@@ -12,5 +12,6 @@ namespace HastaneOtomasyonu.Models.DTobj
         public Status Status { get; set; } = Status.Active;
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public Roles Roles { get; set; } = Roles.Manager;
     }
 }
